@@ -30,15 +30,20 @@ var _ = require('lodash'),
 // Local settings
 var changedTestFiles = [];
 
+// Set NODE_ENV to 'development'
+gulp.task('env:dev', function () {
+  process.env.NODE_ENV = 'development';
+});
+
 // Set NODE_ENV to 'test'
 gulp.task('env:test', function () {
   process.env.NODE_ENV = 'test';
 });
 
-// Set NODE_ENV to 'development'
-gulp.task('env:dev', function () {
-  process.env.NODE_ENV = 'development';
-});
+// SET NODE_ENV to 'staging'
+gulp.task('env:staging', function() {
+  process.env.NODE_ENV = 'staging';
+})
 
 // Set NODE_ENV to 'production'
 gulp.task('env:prod', function () {
@@ -570,6 +575,11 @@ gulp.task('debug', function (done) {
   runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['node-inspector', 'nodemon-debug', 'watch'], done);
   // runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['node-inspector', 'nodemon-debug', 'watch'], done);
 });
+
+// Run the project in staging mode
+gulp.task('staging', function(done) {
+  runSequence('env:staging', 'lint', ['nodemon'], done);
+})
 
 // Run the project in production mode
 gulp.task('prod', function (done) {
