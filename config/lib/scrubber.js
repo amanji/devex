@@ -150,6 +150,8 @@ var scrubDB = function(collections) {
     });
     console.log('Found ' + sensitiveCollections.length + ' sensitive collections.');
 
+    var promise = Promise.resolve();
+
     sensitiveCollections.forEach(function(collection) {
         /**
          * Setup filter query for updateMany
@@ -171,7 +173,6 @@ var scrubDB = function(collections) {
                 return updates;
             }, {});
 
-        var promise = Promise.resolve();
 
         if (indexes.hasOwnProperty(collection.collectionName)) {
             /**
@@ -192,9 +193,9 @@ var scrubDB = function(collections) {
             console.log('Found ' + result.matchedCount + ' entries in ' + collection.collectionName +
             ' with sensitive fields...scrubbed ' + result.modifiedCount + ' entries clean');
         });
-
-        return promise;
     });
+
+    return promise;
 }
 
 var closeClient = function() {
