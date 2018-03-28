@@ -127,6 +127,13 @@ try {
         });
         var filterQuery = { $or: existsOrQuery };
 
+        if (collectionName === 'users') {
+            var notQuery = ['admin', 'dev', 'gov', 'user'].map(function(username) {
+                return { 'username': { $ne: username } };
+            });
+            filterQuery.$and = notQuery;
+        }
+
         /**
          * Setup update obects for updateMany
          */
