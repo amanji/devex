@@ -7,7 +7,8 @@ var config = require('../config'),
   mongoose = require('./mongoose'),
   express = require('./express'),
   chalk = require('chalk'),
-  seed = require('./seed');
+  seed = require('./seed'),
+  scrubber = require('./scrubber');
 
 function seedDB() {
   if (config.seedDB && config.seedDB.seed) {
@@ -20,11 +21,20 @@ function seedDB() {
 mongoose.loadModels(seedDB);
 
 module.exports.init = function init(callback) {
-  mongoose.connect(function (db) {
-    // Initialize express
-    var app = express.init(db);
-    if (callback) callback(app, db, config);
+  var promise = Promise.resolve();
 
+  if (process.env.NODE_ENV === 'staging') {
+    promise.then(function() {
+      return scrubber.scrub();
+    });
+  }
+
+  promise.then(function() {
+    mongoose.connect(function (db) {
+      // Initialize express
+      var app = express.init(db);
+      if (callback) callback(app, db, config);
+    });
   });
 };
 

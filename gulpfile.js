@@ -578,7 +578,7 @@ gulp.task('debug', function (done) {
 
 // Run the project in staging mode
 gulp.task('staging', function(done) {
-  runSequence('env:staging', 'lint', ['nodemon'], done);
+  runSequence('env:staging', ['copyLocalEnvConfig'], 'lint', ['nodemon'], done);
 })
 
 // Run the project in production mode

@@ -1,9 +1,9 @@
 /**
  * Connect to staging database.
- * This currenty assumes that the staging db will be named `devex`.
+ * This currenty assumes that the staging db will be named `devexStaging`.
  */
 var connection = new Mongo();
-var db = connection.getDB("devex");
+var db = connection.getDB("devexStaging");
 
 print('Connected to db: ' + db);
 
